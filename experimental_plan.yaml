@@ -1,9 +1,9 @@
 name : VAD
-version: 0.0.0
+version: 1.0.0
 
 external_path:
-    - load_train_data_path: ./solution/sample_data/train_input_path/
-    - load_inference_data_path: ./solution/sample_data/inference_input_path/ 
+    - load_train_data_path: ./solution/sample_data/train/
+    - load_inference_data_path: ./solution/sample_data/inference/ 
     - save_train_artifacts_path:
     - save_inference_artifacts_path:
     - load_model_path: 
@@ -24,9 +24,8 @@ user_parameters:
             - y_column: label # (str)
               path_column: image_path # (str)
               ok_class: good # (str)
-              train_validate_column: phase # (str)
               validation_split_rate: 0.1 # (float)
-              threshold_method: F1 # (str)
+              threshold_method: Percentile # (str)
           ui_args:
             - y_column
             - path_column
@@ -35,7 +34,10 @@ user_parameters:
         - step: train
           args:
             - model_name: fastflow # (str)
-
+              percentile: 0.99
+              monitor_metric: loss
+          ui_args:
+            - model_name
     - inference_pipeline:
         - step: input 
           args:
@@ -142,3 +144,13 @@ ui_args_detail:
                   - 1
                   - 1000
 
+        - step: train
+          args:
+              - name: model_name
+                description: VAD에 사용할 모델을 입력합니다.
+                type: single_selection
+                selectable:
+                  - fastflow
+                  - patchcore
+                default:
+                  - fastflow
