@@ -71,7 +71,7 @@ asset_source:
         - step: train
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: v1.0.0_vad
+            branch: v1.0.0
             requirements:
               - scikit-learn==1.4.2
 
@@ -93,7 +93,7 @@ asset_source:
         - step: inference
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: v1.0.0_vad
+            branch: v1.0.0
             requirements:
 
         - step: output
@@ -128,5 +128,3 @@ ui_args_detail:
                 default:
                   - fastflow 
   
-
-
