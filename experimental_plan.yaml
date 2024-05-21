@@ -66,13 +66,14 @@ asset_source:
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
+              - seaborn==0.13.2
 
         - step: train
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
               - scikit-learn==1.4.2
 
@@ -88,13 +89,13 @@ asset_source:
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
 
         - step: inference
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
 
         - step: output
