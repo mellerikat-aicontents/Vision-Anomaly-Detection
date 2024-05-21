@@ -25,9 +25,6 @@ user_parameters:
               path_column: image_path # (str)
               validation_split_rate: 0.1 # (float)
               threshold_method: Percentile # (str)
-          ui_args:
-            - y_column
-            - path_column
              
         - step: train
           args:
@@ -48,6 +45,7 @@ user_parameters:
              
         - step: inference
           args:
+            - inference_threshold: 0.5
 
         - step: output
           args:
@@ -118,34 +116,17 @@ control:
   
 ui_args_detail:
     - train_pipeline:
-        - step: readiness
-          args:
-              - name: y_column
-                description: VAD에 사용할 y column명을 입력합니다.
-                type: string
-                default: 'label'
-                range:
-                  - 1
-                  - 1000
-
-              - name: path_column
-                description: VAD에 사용할 path column명을 입력합니다.
-                type: string
-                default: 'image_path'
-                range:
-                  - 1
-                  - 1000
 
         - step: train
           args:
               - name: model_name
-                description: VAD에 사용할 모델명을 입력합니다.
+                description: Select a model name to use in VAD.
                 type: single_selection
-                default: 'label'
                 selectable:
                   - fastflow
                   - patchcore
                 default:
-                  - fastflow   
+                  - fastflow 
+  
 
 
