@@ -3,7 +3,7 @@ version: 1.0.0
 
 external_path:
     - load_train_data_path: ./solution/sample_data/train/
-    - load_inference_data_path: ./solution/sample_data/test/ 
+    - load_inference_data_path: ./solution/sample_data/inference/ 
     - save_train_artifacts_path:
     - save_inference_artifacts_path:
     - load_model_path: 
@@ -64,13 +64,14 @@ asset_source:
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
+              - seaborn==0.13.2
 
         - step: train
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0
             requirements:
               - scikit-learn==1.4.2
 
@@ -86,13 +87,13 @@ asset_source:
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
 
         - step: inference
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0
             requirements:
 
         - step: output
@@ -127,5 +128,3 @@ ui_args_detail:
                 default:
                   - fastflow 
   
-
-
