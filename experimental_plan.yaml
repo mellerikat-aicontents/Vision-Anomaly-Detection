@@ -21,14 +21,13 @@ user_parameters:
 
         - step: readiness 
           args:
-            - y_column: label # (str)
-              path_column: image_path # (str)
+            - train_validate_column:  # (str), column name | blank
               validation_split_rate: 0.1 # (float)
               threshold_method: Percentile # (str)
              
         - step: train
           args:
-            - model_name: fastflow # (str)
+            - model_name: patchcore # (str)
               percentile: 0.99
               monitor_metric: loss
           ui_args:
@@ -59,21 +58,19 @@ asset_source:
             branch: v4.1.0_vision
             requirements:
               - pillow
-              - pandas==1.5.3
         
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
             branch: v1.0.0_vad
             requirements:
-              - seaborn==0.13.2
 
         - step: train
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
             branch: v1.0.0
             requirements:
-              - scikit-learn==1.4.2
+              - requirements.txt
 
     - inference_pipeline:
         - step: input
@@ -82,7 +79,7 @@ asset_source:
             branch: v4.1.0_vision
             requirements:
               - pillow
-              - pandas==1.5.3
+              - pandas
 
         - step: readiness
           source:  
@@ -104,7 +101,7 @@ asset_source:
               - pillow
 
 control:
-  - get_asset_source: every # (str), once | every(default)
+  - get_asset_source: once # (str), once | every(default)
   - backup_artifacts: True # (bool), True(default) | False
   - backup_log: True # (bool), True(default) | False
   - backup_size: 1000 # (int), 1000(default) <= args < 10000
