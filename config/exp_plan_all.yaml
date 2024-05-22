@@ -1,0 +1,131 @@
+name : VAD
+version: 1.0.0
+
+external_path:
+    - load_train_data_path: ./solution/sample_data/train/
+    - load_inference_data_path: ./solution/sample_data/test/ 
+    - save_train_artifacts_path:
+    - save_inference_artifacts_path:
+    - load_model_path: 
+
+
+external_path_permission:
+    - aws_key_profile:
+
+user_parameters:
+    - train_pipeline:
+        - step: input  
+          args:
+            - file_type: csv   
+              encoding: utf-8  
+
+        - step: readiness 
+          args:
+            - y_column: label # (str)
+              path_column: image_path # (str)
+              validation_split_rate: 0.1 # (float)
+              threshold_method: Percentile # (str)
+             
+        - step: train
+          args:
+            - model_name: fastflow # (str)
+              percentile: 0.99
+              monitor_metric: loss
+          ui_args:
+            - model_name
+
+    - inference_pipeline:
+        - step: input 
+          args:
+            - file_type: csv   
+              encoding: utf-8  
+
+        - step: readiness 
+          args:              
+             
+        - step: inference
+          args:
+            - inference_threshold: 0.5
+
+        - step: output
+          args:
+            - none:
+
+asset_source:
+    - train_pipeline:
+        - step: input
+          source:  
+            code: http://mod.lge.com/hub/dxadvtech/assets/input.git # (str), local
+            branch: v4.1.0_vision
+            requirements:
+              - pillow
+              - pandas==1.5.3
+        
+        - step: readiness
+          source:  
+            code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
+            branch: vad_dev
+            requirements:
+
+        - step: train
+          source: 
+            code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
+            branch: vad_dev
+            requirements:
+              - scikit-learn==1.4.2
+
+    - inference_pipeline:
+        - step: input
+          source:  
+            code: http://mod.lge.com/hub/dxadvtech/assets/input.git # (str), git url | local
+            branch: v4.1.0_vision
+            requirements:
+              - pillow
+              - pandas==1.5.3
+
+        - step: readiness
+          source:  
+            code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
+            branch: vad_dev
+            requirements:
+
+        - step: inference
+          source: 
+            code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
+            branch: vad_dev
+            requirements:
+
+        - step: output
+          source:
+            code: http://mod.lge.com/hub/dxadvtech/assets/output.git # (str), git url | local
+            branch: output_1.0
+            requirements:
+              - pillow
+
+control:
+  - get_asset_source: every # (str), once | every(default)
+  - backup_artifacts: True # (bool), True(default) | False
+  - backup_log: True # (bool), True(default) | False
+  - backup_size: 1000 # (int), 1000(default) <= args < 10000
+  - interface_mode: memory # (str), memory(default) | file
+    ## 5. asset data, config interfacing method - memory: (fast) / file: (saved; non-volatilizing)
+  # - save_inference_format: tar.gz ## tar.gz, zip
+  #   ## 7. resource check
+  # - check_resource: False ## True: measure memory, cpu / False
+  
+ui_args_detail:
+    - train_pipeline:
+
+        - step: train
+          args:
+              - name: model_name
+                description: Select a model name to use in VAD.
+                type: single_selection
+                selectable:
+                  - fastflow
+                  - patchcore
+                default:
+                  - fastflow 
+  
+
+
