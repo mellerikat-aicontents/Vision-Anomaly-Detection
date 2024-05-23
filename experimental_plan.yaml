@@ -8,7 +8,6 @@ external_path:
     - save_inference_artifacts_path:
     - load_model_path: 
 
-
 external_path_permission:
     - aws_key_profile:
 
@@ -22,14 +21,14 @@ user_parameters:
         - step: readiness 
           args:
             - train_validate_column:  # (str), column name | blank
-              validation_split_rate: 0.1 # (float)
-              threshold_method: Percentile # (str)
+              validation_split_rate: 0.1 # (float), 0~1
+              threshold_method: Percentile # (str) Percentile | F1
              
         - step: train
           args:
-            - model_name: patchcore # (str)
-              percentile: 0.99
-              monitor_metric: loss
+            - model_name: patchcore # (str), patchcore | fastflow
+              percentile: 0.99 # (float), 0~1
+              monitor_metric: loss # (int), loss | image_AUROC | image_F1Score
           ui_args:
             - model_name
 
@@ -44,7 +43,7 @@ user_parameters:
              
         - step: inference
           args:
-            - inference_threshold: 0.5
+            - inference_threshold: 0.5 # (float), 0~1
 
         - step: output
           args:
@@ -70,6 +69,8 @@ asset_source:
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
             branch: v1.0.0
             requirements:
+              - torch==2.1.2 # --index-url https://download.pytorch.org/whl/cu118
+              - torchvision==0.16.2 # --index-url https://download.pytorch.org/whl/cu118
               - requirements.txt
 
     - inference_pipeline:
@@ -101,7 +102,7 @@ asset_source:
               - pillow
 
 control:
-  - get_asset_source: once # (str), once | every(default)
+  - get_asset_source: every # (str), once | every(default)
   - backup_artifacts: True # (bool), True(default) | False
   - backup_log: True # (bool), True(default) | False
   - backup_size: 1000 # (int), 1000(default) <= args < 10000
