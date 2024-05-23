@@ -3,10 +3,11 @@ version: 1.0.0
 
 external_path:
     - load_train_data_path: ./solution/sample_data/train/
-    - load_inference_data_path: ./solution/sample_data/inference/ 
+    - load_inference_data_path: ./solution/sample_data/test/ 
     - save_train_artifacts_path:
     - save_inference_artifacts_path:
     - load_model_path: 
+
 
 external_path_permission:
     - aws_key_profile:
@@ -20,15 +21,16 @@ user_parameters:
 
         - step: readiness 
           args:
-            - train_validate_column:  # (str), column name | blank
-              validation_split_rate: 0.1 # (float), 0~1
-              threshold_method: Percentile # (str) Percentile | F1
+            - y_column: label # (str)
+              path_column: image_path # (str)
+              validation_split_rate: 0.1 # (float)
+              threshold_method: Percentile # (str)
              
         - step: train
           args:
-            - model_name: patchcore # (str), patchcore | fastflow
-              percentile: 0.99 # (float), 0~1
-              monitor_metric: loss # (int), loss | image_AUROC | image_F1Score
+            - model_name: fastflow # (str)
+              percentile: 0.99
+              monitor_metric: loss
           ui_args:
             - model_name
 
@@ -43,7 +45,7 @@ user_parameters:
              
         - step: inference
           args:
-            - inference_threshold: 0.5 # (float), 0~1
+            - inference_threshold: 0.5
 
         - step: output
           args:
@@ -57,21 +59,20 @@ asset_source:
             branch: v4.1.0_vision
             requirements:
               - pillow
+              - pandas==1.5.3
         
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: v1.0.0_vad
+            branch: vad_dev
             requirements:
 
         - step: train
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: v1.0.0
+            branch: vad_dev
             requirements:
-              - torch==2.1.2 # --index-url https://download.pytorch.org/whl/cu118
-              - torchvision==0.16.2 # --index-url https://download.pytorch.org/whl/cu118
-              - requirements.txt
+              - scikit-learn==1.4.2
 
     - inference_pipeline:
         - step: input
@@ -80,18 +81,18 @@ asset_source:
             branch: v4.1.0_vision
             requirements:
               - pillow
-              - pandas
+              - pandas==1.5.3
 
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: v1.0.0_vad
+            branch: vad_dev
             requirements:
 
         - step: inference
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: v1.0.0
+            branch: vad_dev
             requirements:
 
         - step: output
@@ -126,3 +127,5 @@ ui_args_detail:
                 default:
                   - fastflow 
   
+
+
