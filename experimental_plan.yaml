@@ -27,8 +27,8 @@ user_parameters:
         - step: train
           args:
             - model_name: patchcore # (str), patchcore | fastflow
-              percentile: 0.99 # (float), 0~1
-              monitor_metric: loss # (int), loss | image_AUROC | image_F1Score
+              percentile: 0.99 # (float), 0~1vad/solution/config/exp_plan_all.yaml
+              monitor_metric: loss # (str), loss | image_AUROC | image_F1Score
           ui_args:
             - model_name
 
@@ -67,10 +67,10 @@ asset_source:
         - step: train
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: v1.0.0
+            branch: vad_dev # v1.0.0
             requirements:
-              - torch==2.1.2 # --index-url https://download.pytorch.org/whl/cu118
-              - torchvision==0.16.2 # --index-url https://download.pytorch.org/whl/cu118
+              - torch==2.1.2 --index-url https://download.pytorch.org/whl/cu118
+              - torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
               - requirements.txt
 
     - inference_pipeline:
@@ -91,7 +91,7 @@ asset_source:
         - step: inference
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: v1.0.0
+            branch: vad_dev # v1.0.0
             requirements:
 
         - step: output
