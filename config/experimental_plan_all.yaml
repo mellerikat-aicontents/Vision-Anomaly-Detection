@@ -2,12 +2,11 @@ name : VAD
 version: 1.0.0
 
 external_path:
-    - load_train_data_path: ./solution/sample_data/train/
-    - load_inference_data_path: ./solution/sample_data/test/ 
+    - load_train_data_path: /nas001/projects/DXADVTECH/AIContents/VAD/magna/train/
+    - load_inference_data_path: /nas001/projects/DXADVTECH/AIContents/VAD/magna/inference/ # /nas001/users/yoonji.suh/splunk_demo_VAD/
     - save_train_artifacts_path:
     - save_inference_artifacts_path:
     - load_model_path: 
-
 
 external_path_permission:
     - aws_key_profile:
@@ -21,16 +20,36 @@ user_parameters:
 
         - step: readiness 
           args:
-            - y_column: label # (str)
-              path_column: image_path # (str)
-              validation_split_rate: 0.1 # (float)
-              threshold_method: Percentile # (str)
+            - y_column: label # (str), label column name | label(default)
+              path_column: image_path # (str), image path column name | image_path(default)
+              ok_class: # (str), ok class name | blank(default)
+              train_validate_column:  # (str), column name | blank(default)
+              validation_split_rate: 0.2 # (float), 0<arg<1
+              threshold_method: F1 # (str) Percentile | F1(default)
+              num_minor_threshold: 5 # (int), 0<arg<100
+              ratio_minor_threshold: 0.1 # (float), 0<arg<1
              
         - step: train
           args:
-            - model_name: fastflow # (str)
-              percentile: 0.99
-              monitor_metric: loss
+            - model_name: patchcore # (str), patchcore | fastflow
+              experiment_seed: 42 # (int), 0<arg<1000
+              img_size: 256 # (int), 32<arg
+              batch_size: 8 # (int), 1<arg<64
+              max_epochs: 30 # (int), 1<arg<1000
+              accelerator: gpu # (str), cpu | gpu
+              monitor_metric: loss # (str), loss | image_AUROC | image_F1Score
+              save_validation_heatmap: True # (bool), True(default) | False
+              percentile: 0.9 # (float), 0~1
+              augmentation_list: [rotation, brightness, contrast, saturation, hue, blur]
+              augmentation_choice: 6
+              rotation_angle: 30
+              brightness_degree: 0.7
+              contrast_degree: 0.7
+              saturation_degree: 0.7
+              hue_degree: 0.5
+              blur_kernel_size: 5
+              model_parameters: {“fastflow_backborn”: ‘resnet18’, “fastflow_flow_steps”: 8, “patchcore_backborn”: ‘wide_resnet50_2’, “patchcore_coreset_sampling_ratio”: 0.1, “patchcore_layers”: [“layer2”, “layer3”]}
+
           ui_args:
             - model_name
 
@@ -45,7 +64,9 @@ user_parameters:
              
         - step: inference
           args:
-            - inference_threshold: 0.5
+            - save_anomaly_maps: True
+              inference_threshold: 0.5 # (float), 0~1
+              
 
         - step: output
           args:
@@ -59,20 +80,21 @@ asset_source:
             branch: v4.1.0_vision
             requirements:
               - pillow
-              - pandas==1.5.3
         
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
 
         - step: train
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0
             requirements:
-              - scikit-learn==1.4.2
+              - torch==2.1.2 --index-url https://download.pytorch.org/whl/cu118
+              - torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
+              - requirements.txt
 
     - inference_pipeline:
         - step: input
@@ -81,18 +103,18 @@ asset_source:
             branch: v4.1.0_vision
             requirements:
               - pillow
-              - pandas==1.5.3
+              - pandas
 
         - step: readiness
           source:  
             code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0_vad
             requirements:
 
         - step: inference
           source: 
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
-            branch: vad_dev
+            branch: v1.0.0
             requirements:
 
         - step: output
@@ -110,8 +132,7 @@ control:
   - interface_mode: memory # (str), memory(default) | file
     ## 5. asset data, config interfacing method - memory: (fast) / file: (saved; non-volatilizing)
   # - save_inference_format: tar.gz ## tar.gz, zip
-  #   ## 7. resource check
-  # - check_resource: False ## True: measure memory, cpu / False
+  - check_resource: False ## (bool, str), True(measure memory) | False(default) | cpu
   
 ui_args_detail:
     - train_pipeline:
@@ -127,5 +148,3 @@ ui_args_detail:
                 default:
                   - fastflow 
   
-
-
