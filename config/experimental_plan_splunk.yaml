@@ -1,0 +1,167 @@
+name : VAD
+version: 1.0.0
+ 
+external_path:
+    - load_train_data_path: ./solution/newData/magna/train/
+    - load_inference_data_path: ./solution/newData/magna/inference/
+    - save_train_artifacts_path:
+    - save_inference_artifacts_path:
+    - load_model_path:
+ 
+ 
+external_path_permission:
+    - aws_key_profile:
+ 
+user_parameters:
+    - train_pipeline:
+        - step: input 
+          args:
+            - file_type: csv  
+              encoding: utf-8 
+ 
+        - step: readiness
+          args:
+            - y_column: label # (str)
+              path_column: image_path # (str)
+              ok_class: OK
+              validation_split_rate: 0.2 # (float)
+              threshold_method: Percentile # (str)
+
+          ui_args:
+            - y_column
+            - path_column
+              
+        - step: train
+          args:
+            - model_name: fastflow # (str)
+              img_size: [256,256]
+              percentile: 0.9
+              monitor_metric: loss
+              accelerator: gpu
+              max_epochs: 10
+              augmentation_list: [ brightness, contrast,blur]
+              augmentation_choice: 3
+              rotation_angle: 30
+              brightness_degree: 0.3
+              contrast_degree: 0.3
+              saturation_degree: 0.3
+              hue_degree: 0.3
+              blur_kernel_size: 5
+          ui_args:
+            - model_name
+ 
+    - inference_pipeline:
+        - step: input
+          args:
+            - file_type: csv  
+              encoding: utf-8 
+ 
+        - step: readiness
+          args:             
+              
+        - step: inference
+          args:
+            - save_anomaly_maps: True
+              inference_threshold: 0.5
+ 
+        - step: output
+          args:
+            - none:
+ 
+asset_source:
+    - train_pipeline:
+        - step: input
+          source: 
+            code: http://mod.lge.com/hub/dxadvtech/assets/input.git # (str), local
+            branch: v4.1.0_vision
+            requirements:
+              - pillow
+              - pandas==1.5.3
+         
+        - step: readiness
+          source: 
+            code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
+            branch: v1.0.0_vad
+            requirements:
+              - seaborn==0.13.2
+ 
+        - step: train
+          source:
+            code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
+            branch: v1.0.0
+            requirements:
+              - scikit-learn==1.4.2
+              - torch==2.1.2 --index-url https://download.pytorch.org/whl/cu118
+              - torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
+              - requirements.txt
+ 
+    - inference_pipeline:
+        - step: input
+          source: 
+            code: http://mod.lge.com/hub/dxadvtech/assets/input.git # (str), git url | local
+            branch: v4.1.0_vision
+            requirements:
+              - pillow
+              - pandas==1.5.3
+ 
+        - step: readiness
+          source: 
+            code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
+            branch: v1.0.0_vad
+            requirements:
+ 
+        - step: inference
+          source:
+            code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
+            branch: v1.0.0
+            requirements:
+ 
+        - step: output
+          source:
+            code: http://mod.lge.com/hub/dxadvtech/assets/output.git # (str), git url | local
+            branch: output_1.0
+            requirements:
+              - pillow
+ 
+control:
+  - get_asset_source: every # (str), once | every(default)
+  - backup_artifacts: True # (bool), True(default) | False
+  - backup_log: True # (bool), True(default) | False
+  - backup_size: 1000 # (int), 1000(default) <= args < 10000
+  - interface_mode: memory # (str), memory(default) | file
+    ## 5. asset data, config interfacing method - memory: (fast) / file: (saved; non-volatilizing)
+  # - save_inference_format: tar.gz ## tar.gz, zip
+  #   ## 7. resource check
+  # - check_resource: False ## True: measure memory, cpu / False
+   
+ui_args_detail:
+    - train_pipeline:
+        - step: readiness
+          args:
+              - name: y_column
+                description: VAD에 사용할 y column명을 입력합니다.
+                type: string
+                default: 'label'
+                range:
+                  - 1
+                  - 1000
+ 
+              - name: path_column
+                description: VAD에 사용할 path column명을 입력합니다.
+                type: string
+                default: 'image_path'
+                range:
+                  - 1
+                  - 1000
+ 
+        - step: train
+          args:
+              - name: model_name
+                description: VAD에 사용할 모델명을 입력합니다.
+                type: single_selection
+                default: 'label'
+                selectable:
+                  - fastflow
+                  - patchcore
+                default:
+                  - fastflow  
