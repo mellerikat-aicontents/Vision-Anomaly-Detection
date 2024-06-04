@@ -69,8 +69,8 @@ asset_source:
             code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
             branch: v1.0.0
             requirements:
-              - torch==2.1.2 --index-url https://download.pytorch.org/whl/cu118
-              - torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
+              - torch==2.1.2 # --index-url https://download.pytorch.org/whl/cu118
+              - torchvision==0.16.2 # --index-url https://download.pytorch.org/whl/cu118
               - requirements.txt
 
     - inference_pipeline:
