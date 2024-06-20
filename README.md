@@ -12,8 +12,8 @@
 
 
 # User Guide(collab)
-- [Quick guide](http://collab.lge.com/main/pages/viewpage.action?pageId=2496857231)
-- [기능 설명](http://collab.lge.com/main/pages/viewpage.action?pageId=2496857273)
-- [입력 데이터 및 산출물](http://collab.lge.com/main/pages/viewpage.action?pageId=2496857277)
-- [Parameter](http://collab.lge.com/main/display/LGEPROD/VAD+Parameters)
-- [Release note](http://collab.lge.com/main/display/LGEPROD/VAD+Release+notes)
+- [Quick guide](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/)
+- [기능 설명](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/features)
+- [입력 데이터 및 산출물](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/data)
+- [Parameter](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/parameter)
+- [Release note](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/release)
