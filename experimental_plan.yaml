@@ -26,7 +26,7 @@ user_parameters:
              
         - step: train
           args:
-            - model_name: patchcore # (str), patchcore | fastflow
+            - model_name: fastflow # (str), patchcore | fastflow
               percentile: 0.99 # (float), 0~1vad/solution/config/exp_plan_all.yaml
               monitor_metric: loss # (str), loss | image_AUROC | image_F1Score
           ui_args:
