@@ -5,7 +5,7 @@ Visual Anomaly Detection (VAD) is an AI content that detects abnormal images by 
 # User Guide
 
 - [Quick guide](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/)
-- [기능 설명](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/features)
-- [입력 데이터 및 산출물](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/data)
+- [VAD Features](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/features)
+- [VAD Input and Artifacts](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/data)
 - [Parameter](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/parameter)
 - [Release note](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/release)
