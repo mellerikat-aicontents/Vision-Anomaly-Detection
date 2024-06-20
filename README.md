@@ -11,7 +11,7 @@
 [![Generic badge](https://img.shields.io/badge/request_clm-green.svg?style=for-the-badge)](http://collab.lge.com/main/pages/viewpage.action?pageId=2157128981)
 
 
-# User Guide(collab)
+# User Guide
 - [Quick guide](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/)
 - [기능 설명](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/features)
 - [입력 데이터 및 산출물](https://mellerikat.com/user_guide/data_scientist_guide/ai_contents/vad/data)
