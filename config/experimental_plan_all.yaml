@@ -2,8 +2,8 @@ name : VAD
 version: 1.0.0
 
 external_path:
-    - load_train_data_path: /nas001/projects/DXADVTECH/AIContents/VAD/magna/train/
-    - load_inference_data_path: /nas001/projects/DXADVTECH/AIContents/VAD/magna/inference/ # /nas001/users/yoonji.suh/splunk_demo_VAD/
+    - load_train_data_path: ./solution/sample_data/train/
+    - load_inference_data_path: ./solution/sample_data/inference/ 
     - save_train_artifacts_path:
     - save_inference_artifacts_path:
     - load_model_path: 
@@ -76,30 +76,30 @@ asset_source:
     - train_pipeline:
         - step: input
           source:  
-            code: http://mod.lge.com/hub/dxadvtech/assets/input.git # (str), local
+            code: https://github.com/mellerikat-aicontents/input.git # (str), local
             branch: v4.1.0_vision
             requirements:
               - pillow
         
         - step: readiness
           source:  
-            code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
+            code: https://github.com/mellerikat-aicontents/readiness.git # (str), git url | local
             branch: v1.0.0_vad
             requirements:
 
         - step: train
           source: 
-            code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
+            code: https://github.com/mellerikat-aicontents/vad_modeling.git # (str), git url | local
             branch: v1.0.0
             requirements:
-              - torch==2.1.2 --index-url https://download.pytorch.org/whl/cu118
-              - torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cu118
+              - torch==2.1.2 # --index-url https://download.pytorch.org/whl/cu118 # use for GPU setting
+              - torchvision==0.16.2 # --index-url https://download.pytorch.org/whl/cu118 # use for GPU setting
               - requirements.txt
 
     - inference_pipeline:
         - step: input
           source:  
-            code: http://mod.lge.com/hub/dxadvtech/assets/input.git # (str), git url | local
+            code: https://github.com/mellerikat-aicontents/input.git # (str), git url | local
             branch: v4.1.0_vision
             requirements:
               - pillow
@@ -107,19 +107,19 @@ asset_source:
 
         - step: readiness
           source:  
-            code: http://mod.lge.com/hub/dxadvtech/assets/readiness.git # (str), git url | local
+            code: https://github.com/mellerikat-aicontents/readiness.git # (str), git url | local
             branch: v1.0.0_vad
             requirements:
 
         - step: inference
           source: 
-            code: http://mod.lge.com/hub/dxadvtech/assets/vad.git # (str), git url | local
+            code: https://github.com/mellerikat-aicontents/vad_modeling.git # (str), git url | local
             branch: v1.0.0
             requirements:
 
         - step: output
           source:
-            code: http://mod.lge.com/hub/dxadvtech/assets/output.git # (str), git url | local
+            code: https://github.com/mellerikat-aicontents/output.git # (str), git url | local
             branch: output_1.0
             requirements:
               - pillow
