@@ -45,7 +45,7 @@ user_parameters:
           args:
             - overkill_intensity: 0.05 # (float), -1~1
           ui_args:
-          - overkill_intensity
+            - overkill_intensity
 
         - step: output
           args:
